@@ -10,18 +10,20 @@ export interface SpecConfig {
   security?: Record<string, string[]>[];
 }
 
+const PARAM_RE = /:([a-zA-Z_][a-zA-Z0-9_]*)/g;
+
 function honoPathToOpenAPI(path: string): string {
-  return path.replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, '{$1}');
+  return path.replace(PARAM_RE, '{$1}');
 }
 
 function extractPathParams(path: string): any[] {
+  const re = new RegExp(PARAM_RE.source, 'g');
   const params: any[] = [];
-  const regex = /:([a-zA-Z_][a-zA-Z0-9_]*)/g;
   let match: RegExpExecArray | null;
-  while ((match = regex.exec(path)) !== null) {
+  while ((match = re.exec(path)) !== null) {
     params.push({
       name: match[1],
-      in: 'path',
+      in: 'path' as const,
       required: true,
       schema: { type: 'string' },
     });
@@ -48,11 +50,17 @@ export function generateSpec(registry: RouteRegistry, config: SpecConfig): Recor
     if (entry.security) operation.security = entry.security;
     if (entry.requestBody) operation.requestBody = entry.requestBody;
 
-    const autoParams = extractPathParams(rawPath);
     const userParams = entry.parameters ?? [];
-    const autoParamNames = new Set(userParams.map((p: any) => p.name));
-    const mergedParams = [...userParams, ...autoParams.filter(p => !autoParamNames.has(p.name))];
-    if (mergedParams.length > 0) operation.parameters = mergedParams;
+    const autoParams = extractPathParams(rawPath);
+
+    if (userParams.length > 0 || autoParams.length > 0) {
+      const userParamNames = new Set(userParams.map((p: any) => p.name));
+      const merged =
+        autoParams.length > 0
+          ? [...userParams, ...autoParams.filter(p => !userParamNames.has(p.name))]
+          : userParams;
+      if (merged.length > 0) operation.parameters = merged;
+    }
 
     operation.responses = entry.responses;
 
