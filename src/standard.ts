@@ -4,6 +4,8 @@ import { RouteRegistry, REGISTRY, getRegistry } from './registry';
 import type { Handler, HttpMethod } from './types';
 import type { SpecConfig } from './spec';
 
+const HTTP_METHODS: HttpMethod[] = ['get', 'post', 'put', 'patch', 'delete'];
+
 export { resolver } from 'hono-openapi';
 
 export type StandardDocOptions = {
@@ -104,38 +106,27 @@ export function createRouter(): StandardRouterInstance {
     });
   }
 
-  const self: StandardRouterInstance = {
+  const self = {
     router,
-    route: (path: string, subRouter: any, opts?: StandardDocOptions) => {
+    route(path: string, subRouter: any, opts?: StandardDocOptions) {
       const subRegistry = getRegistry(subRouter);
-      if (subRegistry) {
-        registry.merge(path, subRegistry, opts as any);
-      }
+      if (subRegistry) registry.merge(path, subRegistry, opts as any);
       router.route(path, subRouter);
       return self;
     },
-    get: (path, handlerOrOpts, handler?) => {
-      addRoute('get', path, handlerOrOpts, handler);
+    doc: (config: any) => standardOpenAPIDoc(router, config),
+  } as StandardRouterInstance;
+
+  for (const method of HTTP_METHODS) {
+    (self as any)[method] = (
+      path: string,
+      handlerOrOpts: Handler | StandardDocOptions,
+      handler?: Handler,
+    ) => {
+      addRoute(method, path, handlerOrOpts, handler);
       return self;
-    },
-    post: (path, handlerOrOpts, handler?) => {
-      addRoute('post', path, handlerOrOpts, handler);
-      return self;
-    },
-    put: (path, handlerOrOpts, handler?) => {
-      addRoute('put', path, handlerOrOpts, handler);
-      return self;
-    },
-    patch: (path, handlerOrOpts, handler?) => {
-      addRoute('patch', path, handlerOrOpts, handler);
-      return self;
-    },
-    delete: (path, handlerOrOpts, handler?) => {
-      addRoute('delete', path, handlerOrOpts, handler);
-      return self;
-    },
-    doc: config => standardOpenAPIDoc(router, config),
-  };
+    };
+  }
 
   return self;
 }

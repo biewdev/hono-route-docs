@@ -24,23 +24,26 @@ export class RouteRegistry {
 
   merge(prefix: string, other: RouteRegistry, opts?: DocOptions): void {
     for (const entry of other.entries) {
-      const merged: RouteEntry = {
-        ...entry,
-        path: prefix + (entry.path === '/' ? '' : entry.path),
-      };
+      const path = prefix + (entry.path === '/' ? '' : entry.path);
 
-      if (opts) {
-        const hasOwnTags = entry.tags && entry.tags.length > 0;
-
-        if (opts.tags && !hasOwnTags) merged.tags = opts.tags;
-        if (opts.summary && !entry.summary) merged.summary = opts.summary;
-        if (opts.description && !entry.description) merged.description = opts.description;
-        if (opts.security && !entry.security) merged.security = opts.security;
-        if (opts.deprecated !== undefined && entry.deprecated === undefined)
-          merged.deprecated = opts.deprecated;
+      if (!opts) {
+        this.entries.push({ ...entry, path });
+        continue;
       }
 
-      this.entries.push(merged);
+      const hasOwnTags = entry.tags && entry.tags.length > 0;
+      this.entries.push({
+        ...entry,
+        path,
+        tags: opts.tags && !hasOwnTags ? opts.tags : entry.tags,
+        summary: opts.summary && !entry.summary ? opts.summary : entry.summary,
+        description: opts.description && !entry.description ? opts.description : entry.description,
+        security: opts.security && !entry.security ? opts.security : entry.security,
+        deprecated:
+          opts.deprecated !== undefined && entry.deprecated === undefined
+            ? opts.deprecated
+            : entry.deprecated,
+      });
     }
   }
 }

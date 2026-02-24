@@ -5,6 +5,8 @@ import { generateSpec } from './spec';
 import type { Handler, HttpMethod } from './types';
 import type { SpecConfig } from './spec';
 
+const HTTP_METHODS: HttpMethod[] = ['get', 'post', 'put', 'patch', 'delete'];
+
 export type ZodDocOptions = Partial<
   Pick<
     RouteConfig,
@@ -97,41 +99,28 @@ export function createRouter(): ZodRouterInstance {
     });
   }
 
-  const self: ZodRouterInstance = {
+  const self = {
     router,
-    route: (path: string, subRouter: any, opts?: ZodDocOptions) => {
+    route(path: string, subRouter: any, opts?: ZodDocOptions) {
       const subRegistry = getRegistry(subRouter);
-      if (subRegistry) {
-        registry.merge(path, subRegistry, opts as any);
-      }
-      if (opts && subRouter.openAPIRegistry) {
-        applyDocOptions(subRouter, opts);
-      }
+      if (subRegistry) registry.merge(path, subRegistry, opts as any);
+      if (opts && subRouter.openAPIRegistry) applyDocOptions(subRouter, opts);
       router.route(path, subRouter);
       return self;
     },
-    get: (path: string, handlerOrOpts: Handler | ZodDocOptions, handler?: Handler) => {
-      addRoute('get', path, handlerOrOpts, handler);
+    doc: (config: any) => zodOpenAPIDoc(router, config),
+  } as ZodRouterInstance;
+
+  for (const method of HTTP_METHODS) {
+    (self as any)[method] = (
+      path: string,
+      handlerOrOpts: Handler | ZodDocOptions,
+      handler?: Handler,
+    ) => {
+      addRoute(method, path, handlerOrOpts, handler);
       return self;
-    },
-    post: (path: string, handlerOrOpts: Handler | ZodDocOptions, handler?: Handler) => {
-      addRoute('post', path, handlerOrOpts, handler);
-      return self;
-    },
-    put: (path: string, handlerOrOpts: Handler | ZodDocOptions, handler?: Handler) => {
-      addRoute('put', path, handlerOrOpts, handler);
-      return self;
-    },
-    patch: (path: string, handlerOrOpts: Handler | ZodDocOptions, handler?: Handler) => {
-      addRoute('patch', path, handlerOrOpts, handler);
-      return self;
-    },
-    delete: (path: string, handlerOrOpts: Handler | ZodDocOptions, handler?: Handler) => {
-      addRoute('delete', path, handlerOrOpts, handler);
-      return self;
-    },
-    doc: config => zodOpenAPIDoc(router, config),
-  };
+    };
+  }
 
   return self;
 }

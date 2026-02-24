@@ -34,14 +34,15 @@ export type DocOptions = {
 };
 
 export type Handler = (c: any) => Response | Promise<Response>;
+export type MiddlewareHandler = (c: any, next: () => Promise<void>) => any;
 
 export interface RouterInstance {
   router: any;
   route: (path: string, subRouter: any, opts?: DocOptions) => RouterInstance;
-  get: (path: string, handlerOrOpts: Handler | DocOptions, handler?: Handler) => RouterInstance;
-  post: (path: string, handlerOrOpts: Handler | DocOptions, handler?: Handler) => RouterInstance;
-  put: (path: string, handlerOrOpts: Handler | DocOptions, handler?: Handler) => RouterInstance;
-  patch: (path: string, handlerOrOpts: Handler | DocOptions, handler?: Handler) => RouterInstance;
-  delete: (path: string, handlerOrOpts: Handler | DocOptions, handler?: Handler) => RouterInstance;
+  get: (path: string, ...args: any[]) => RouterInstance;
+  post: (path: string, ...args: any[]) => RouterInstance;
+  put: (path: string, ...args: any[]) => RouterInstance;
+  patch: (path: string, ...args: any[]) => RouterInstance;
+  delete: (path: string, ...args: any[]) => RouterInstance;
   doc: (config: import('./spec').SpecConfig) => (c: any) => Response;
 }
