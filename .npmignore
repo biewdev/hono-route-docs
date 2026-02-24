@@ -4,3 +4,4 @@ src/
 tsup.config.ts
 tsconfig.json
 .gitignore
+tests/

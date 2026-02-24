@@ -94,12 +94,15 @@
   },
   "devDependencies": {
     "@hono/standard-validator": "^0.2.2",
-    "@hono/zod-openapi": "^1.2.1",
-    "hono": "^4.11.9",
+    "@hono/zod-openapi": "^1.2.2",
+    "hono": "^4.12.2",
     "hono-openapi": "^1.2.0",
     "prettier": "^3.8.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "zod": "^4.3.6"
-  }
+  },
+  "workspaces": [
+    "tests/app"
+  ]
 }
