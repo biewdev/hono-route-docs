@@ -1,6 +1,6 @@
 {
   "name": "hono-route-docs",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Lightweight OpenAPI 3.1 spec generator for Hono with a fluent router API. Works with raw JSON Schema, Zod, Valibot, and any Standard Schema library.",
   "keywords": [
     "hono",
