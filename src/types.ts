@@ -38,11 +38,172 @@ export type MiddlewareHandler = (c: any, next: () => Promise<void>) => any;
 
 export interface RouterInstance {
   router: any;
-  route: (path: string, subRouter: any, opts?: DocOptions) => RouterInstance;
-  get: (path: string, ...args: any[]) => RouterInstance;
-  post: (path: string, ...args: any[]) => RouterInstance;
-  put: (path: string, ...args: any[]) => RouterInstance;
-  patch: (path: string, ...args: any[]) => RouterInstance;
-  delete: (path: string, ...args: any[]) => RouterInstance;
-  doc: (config: import('./spec').SpecConfig) => (c: any) => Response;
+  route(path: string, subRouter: any, opts?: DocOptions): RouterInstance;
+
+  get(path: string, handler: Handler): RouterInstance;
+  get(path: string, options: DocOptions, handler: Handler): RouterInstance;
+  get(path: string, options: DocOptions, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  get(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  get(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  get(path: string, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  get(path: string, m1: MiddlewareHandler, m2: MiddlewareHandler, handler: Handler): RouterInstance;
+  get(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  get(path: string, ...args: (DocOptions | MiddlewareHandler | Handler)[]): RouterInstance;
+
+  post(path: string, handler: Handler): RouterInstance;
+  post(path: string, options: DocOptions, handler: Handler): RouterInstance;
+  post(path: string, options: DocOptions, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  post(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  post(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  post(path: string, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  post(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  post(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  post(path: string, ...args: (DocOptions | MiddlewareHandler | Handler)[]): RouterInstance;
+
+  put(path: string, handler: Handler): RouterInstance;
+  put(path: string, options: DocOptions, handler: Handler): RouterInstance;
+  put(path: string, options: DocOptions, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  put(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  put(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  put(path: string, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  put(path: string, m1: MiddlewareHandler, m2: MiddlewareHandler, handler: Handler): RouterInstance;
+  put(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  put(path: string, ...args: (DocOptions | MiddlewareHandler | Handler)[]): RouterInstance;
+
+  patch(path: string, handler: Handler): RouterInstance;
+  patch(path: string, options: DocOptions, handler: Handler): RouterInstance;
+  patch(path: string, options: DocOptions, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  patch(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  patch(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  patch(path: string, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  patch(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  patch(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  patch(path: string, ...args: (DocOptions | MiddlewareHandler | Handler)[]): RouterInstance;
+
+  delete(path: string, handler: Handler): RouterInstance;
+  delete(path: string, options: DocOptions, handler: Handler): RouterInstance;
+  delete(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  delete(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  delete(
+    path: string,
+    options: DocOptions,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  delete(path: string, m1: MiddlewareHandler, handler: Handler): RouterInstance;
+  delete(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  delete(
+    path: string,
+    m1: MiddlewareHandler,
+    m2: MiddlewareHandler,
+    m3: MiddlewareHandler,
+    handler: Handler,
+  ): RouterInstance;
+  delete(path: string, ...args: (DocOptions | MiddlewareHandler | Handler)[]): RouterInstance;
+
+  doc(config: import('./spec').SpecConfig): (c: any) => Response;
 }
