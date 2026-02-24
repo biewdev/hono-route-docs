@@ -1,0 +1,15 @@
+{
+  "name": "hono-route-docs-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch index.ts",
+    "start": "bun index.ts"
+  },
+  "dependencies": {
+    "@scalar/hono-api-reference": "^0.9.44",
+    "hono": "^4.12.2",
+    "hono-route-docs": "link:hono-route-docs",
+    "zod": "^4.3.6"
+  }
+}
